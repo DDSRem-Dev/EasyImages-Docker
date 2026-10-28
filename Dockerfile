@@ -13,10 +13,6 @@ ENV S6_SERVICES_GRACETIME=30000 \
     PGID=0
 
 COPY --from=shinsenter/s6-overlay / /
-# PHP 7.4 and 8.1 are EOL and do not receive php2shell fixes.
-# Bookworm's own PHP is 8.2 (security support ends 2026-12-31), so install
-# PHP 8.3 from deb.sury.org and refuse anything older than 8.3.36
-# (CVE-2026-109618, CVE-2026-109619).
 RUN set -ex && \
     export DEBIAN_FRONTEND=noninteractive && \
     ln -sf /command/with-contenv /usr/bin/with-contenv && \
