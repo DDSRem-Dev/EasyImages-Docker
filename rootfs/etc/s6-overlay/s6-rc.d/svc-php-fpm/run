@@ -2,4 +2,4 @@
 # shellcheck shell=bash
 
 exec s6-setuidgid root \
-    /usr/sbin/php-fpm7.4 -F -R
+    /usr/sbin/php-fpm8.3 -F -R
