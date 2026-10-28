@@ -70,8 +70,15 @@ docker-compose pull
 docker-compose up -d
 ```
 
+## 安全说明
+
+本镜像已从停止维护的 PHP 7.4 升级到 PHP 8.3（Debian bookworm + deb.sury.org，不低于 8.3.36），以修复 PHP 核心远程代码执行漏洞 CVE-2026-109618 与 CVE-2026-109619（php2shell）。PHP 7.4 / 8.1 不会收到官方补丁。
+
+已经在跑的容器必须重新拉取镜像并重建容器后才会换成新的 PHP，只重启旧容器无效。`config` 与 `i/` 数据卷可以继续挂载，不需要迁移数据。
+
 ## 更新日志
 
+- PHP 8.3 **安全更新** 升级 PHP 以修复 CVE-2026-109618 / CVE-2026-109619，已部署实例需重新拉取镜像并重建容器
 - v2.8.4 **正式版** 同步更新v2.8.4
 - v2.8.3-r3 **正式版** Nginx 监听443端口
 - v2.8.3-r1 **正式版** Update s6-overlay config file to v3
