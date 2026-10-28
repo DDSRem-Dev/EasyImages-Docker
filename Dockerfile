@@ -35,19 +35,21 @@ RUN set -ex && \
     . /etc/os-release && \
     echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/php.list && \
     apt-get update -y && \
+    cand=$(apt-cache policy php8.3-fpm | awk '/Candidate:/ {print $2; exit}') && \
+    dpkg --compare-versions "$cand" ge 8.3.36 || { echo "php8.3-fpm candidate ${cand:-<none>} is older than 8.3.36 (CVE-2026-109618 / CVE-2026-109619)"; exit 1; } && \
     apt-get install -y \
         nginx \
         systemd-standalone-tmpfiles \
-        'php8.3-cli>=8.3.36' \
-        'php8.3-common>=8.3.36' \
-        'php8.3-curl>=8.3.36' \
-        'php8.3-fpm>=8.3.36' \
-        'php8.3-xml>=8.3.36' \
-        'php8.3-zip>=8.3.36' \
-        'php8.3-gd>=8.3.36' \
-        'php8.3-mbstring>=8.3.36' \
-        'php8.3-bcmath>=8.3.36' \
-        'php8.3-opcache>=8.3.36' && \
+        php8.3-cli \
+        php8.3-common \
+        php8.3-curl \
+        php8.3-fpm \
+        php8.3-xml \
+        php8.3-zip \
+        php8.3-gd \
+        php8.3-mbstring \
+        php8.3-bcmath \
+        php8.3-opcache && \
     php -r 'if (version_compare(PHP_VERSION, "8.3.36", "<") || version_compare(PHP_VERSION, "8.4.0", ">=")) { fwrite(STDERR, "PHP ".PHP_VERSION." is not a patched 8.3 release (need >= 8.3.36 for CVE-2026-109618 and CVE-2026-109619)\n"); exit(1); }' && \
     php -m | grep -qx curl && \
     php -m | grep -qx fileinfo && \
